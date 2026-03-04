@@ -6,6 +6,10 @@ python:
 env:
   global:
     - DJANGO_SETTINGS_MODULE=mysite.settings
+    - AWS_REGION=us-west-2
+    - EB_APP_NAME=swe1-app
+    - EB_ENV_NAME=Swe1-app-env
+    - S3_BUCKET_NAME=elasticbeanstalk-us-west-2-481207240584
 
 install:
   - pip install -r requirements.txt
@@ -21,3 +25,15 @@ script:
 
 after_success:
   - coveralls
+
+deploy:
+  provider: elasticbeanstalk
+  edge: true
+  access_key_id: $AWS_ACCESS_KEY_ID
+  secret_access_key: $AWS_SECRET_ACCESS_KEY
+  region: $AWS_REGION
+  app: $EB_APP_NAME
+  env: $EB_ENV_NAME
+  bucket: $S3_BUCKET_NAME
+  on:
+    branch: main
